@@ -34,20 +34,6 @@ parts:
   -  chapters:
       - file: chapters/command-line/references
 
-  - caption: "Installing Software with Pixi"
-    chapters:
-      - file: chapters/installing-software/index
-        title: Overview
-  - numbered: true
-    chapters:
-      - file: chapters/installing-software/01_environment-managers
-      - file: chapters/installing-software/02_pixi-basics
-  - chapters:
-      - file: chapters/installing-software/a_configuring-the-shell
-      - file: chapters/installing-software/b_ucdavis-hpc-modules
-      - file: chapters/installing-software/c_python-packages
-      - file: chapters/installing-software/d_tasks
-
   - caption: "Introduction to Version Control"
     chapters:
       - file: chapters/version-control/index
@@ -68,6 +54,21 @@ parts:
       - file: chapters/git-for-teams/01_branches-merges
       - file: chapters/git-for-teams/02_working-with-github
       - file: chapters/git-for-teams/03_making-git-comfortable
+
+  - caption: "Installing Software with Pixi"
+    chapters:
+      - file: chapters/installing-software/index
+        title: Overview
+  - numbered: true
+    chapters:
+      - file: chapters/installing-software/01_environment-managers
+      - file: chapters/installing-software/02_pixi-basics
+  - chapters:
+      - file: chapters/installing-software/a_configuring-the-shell
+      - file: chapters/installing-software/b_ucdavis-hpc-modules
+      - file: chapters/installing-software/c_python-packages
+      - file: chapters/installing-software/d_tasks
+
   # - caption: "Retired"
   #   chapters:
   #     - file: chapters/version-control/retired/git-branching
