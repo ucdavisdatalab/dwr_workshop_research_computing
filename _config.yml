@@ -9,7 +9,7 @@ exclude_patterns: [_build, .pixi]
 only_build_toc_files: true
 
 repository:
-  url: https://github.com/ucdavisdatalab/workshop_research_computing
+  url: https://github.com/ucdavisdatalab/dwr_workshop_research_computing
 
 parse:
   myst_enable_extensions:
