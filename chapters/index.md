@@ -4,11 +4,11 @@ This collection of workshops provides an introduction to the concepts,
 workflows, and tools fundamental to reproducible computational research. The
 workshops are:
 
-* Reproducibility Principles and Practices (one 1-hour session)
-* Introduction to the Command Line (one 2-hour session)
-* Installing Software with Pixi (one 2-hour session)
-* Introduction to Version Control (one 2-hour session)
-* Git for Teams (one 2-hour session)
+* Reproducibility Principles and Practices
+* Introduction to the Command Line
+* Introduction to Version Control
+* Git for Teams
+* Installing Software with Pixi
 
 No prior programming experience is required for this workshop series, assuming
 you complete the series in order.
