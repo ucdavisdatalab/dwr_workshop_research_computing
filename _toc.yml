@@ -8,18 +8,10 @@ parts:
   - chapters:
     - file: chapters/setup
 
-  - caption: "Reproducibility Principles and Practices"
+  - caption: "Reproducible Research Guide"
     chapters:
-      - file: chapters/reproducibility/index
-        title: Overview
-  - numbered: true
-    chapters:
-      - file: chapters/reproducibility/01_principles
-      - file: chapters/reproducibility/02_primary_practices
-      - file: chapters/reproducibility/03_secondary_practices
-      - file: chapters/reproducibility/04_case_by_case_practices
-  - chapters:
-      - file: chapters/reproducibility/references
+      - url: https://ucdavisdatalab.github.io/dwr_guide_reproducible_research/
+        title: Link
 
   - caption: "Introduction to the Command Line"
     chapters:
