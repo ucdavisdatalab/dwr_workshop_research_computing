@@ -1,0 +1,19 @@
+flowchart TD
+  start(Start) --> gather
+  gather[Gather the ingredients 🛒] --> make-dough[Make the dough 🌾]
+  gather --> make-sauce[Make the sauce 🍅]
+  gather -.-> chop[Chop the toppings 🔪]
+  make-dough --> stretch-dough[Stretch the dough 🫓]
+
+  make-sauce --> add-sauce[Add the sauce 🥄]
+  stretch-dough --> add-sauce
+
+  add-sauce --> add-cheese[Add the cheese 🧀]
+
+  add-cheese -.-> add-toppings[Add the toppings 🫑🍄‍🟫🫒]
+  chop -.-> add-toppings
+
+  add-cheese --> bake[Bake the pizza 🍕]
+  add-toppings -.-> bake
+
+  bake --> finish(End)

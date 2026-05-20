@@ -49,6 +49,13 @@ Finally, this workflow is one way to make a pizza, but there are other ways.
 There might not be one specific "correct" workflow for a particular goal. Use a
 workflow that works well for you.
 
+:::{figure} /images/workflows/pizza.svg
+:alt: A graph that shows each of the steps in the pizza-making workflow as a node, with directed edges to show which steps are dependent on others.
+:align: center
+:height: 40em
+A workflow diagram of the pizza-making workflow.
+:::
+
 
 ## Workflow Managers
 
