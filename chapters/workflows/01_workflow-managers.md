@@ -323,6 +323,21 @@ the project:
 All of the project files are in a single **project directory** (with
 subdirectories). This makes it easy to back up or share the project.
 
+:::{important}
+[Click here][example-project] to download the Davis Bike Counts example
+project.
+
+After downloading the project, you'll also need to unzip it. You can use your
+computer operating system's built-in graphical tools or the `unzip` shell
+command:
+
+```none
+unzip example-project.zip
+```
+
+[example-project]: https://ucdavis.box.com/s/kx9yag4xcih9hqnkub7yjwew486t5ma2
+:::
+
 The project is set up to use Pixi as an environment manager (but not a workflow
 manager). As a consequence, you can install all of the required software to run
 the project and launch a shell that's ready to use simply by running the `pixi
