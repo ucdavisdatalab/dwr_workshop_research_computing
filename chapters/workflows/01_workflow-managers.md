@@ -287,3 +287,247 @@ of workflow managers][awesome-workflows].
 
 [awesome-workflows]: https://github.com/pditommaso/awesome-pipeline
 :::
+
+
+## Case Study: Davis Bike Counts
+
+The City of Davis uses automated counters to collect data about how many bikes
+pass by two locations: at the intersection of 3rd Street and University Avenue
+(the 3rd Street bike obelisk) and at the intersection of Loyola Drive and Pole
+Line Road. The City publishes the data they collect online.
+
+:::{seealso}
+DataLab also uses this dataset as an example in our [Intermediate R workshop
+series][intermediate-r]. You can learn more about the dataset there.
+
+[intermediate-r]: https://ucdavisdatalab.github.io/workshop_intermediate_r/chapters/cleaning-reshaping/03_reshaping-data.html#an-untidy-dataset
+:::
+
+In the subsequent chapters, we'll use an example project with a minimal
+analysis of the Davis bike counts data to demonstrate several workflow
+managers. The project consists of three R scripts that clean, model, and
+visualize the dataset, respectively. This is the initial directory structure of
+the project:
+
+```none
+├── data/
+│   └── 2020_davis_bikes.rds
+├── pixi.lock
+├── pixi.toml
+└── R/
+    ├── 01_clean.R
+    ├── 02_model.R
+    └── 03_plot.R
+```
+
+All of the project files are in a single **project directory** (with
+subdirectories). This makes it easy to back up or share the project.
+
+The project is set up to use Pixi as an environment manager (but not a workflow
+manager). As a consequence, you can install all of the required software to run
+the project and launch a shell that's ready to use simply by running the `pixi
+shell` command.
+
+The data cleaning, modeling, and visualization steps are already split into
+separate scripts. Separating cleaning from analysis is always a good practice
+because it helps ensure that all analysis code uses the same clean data as a
+starting point.
+
+For this project, the modeling and visualization steps are both quite simple,
+so it's not really necessary to separate them. Here, they're separated
+primarily to make it easy to treat them as separate steps in workflow managers.
+However, separating them also paves the way for expanding the project into
+something more complex.
+
+The scripts are numbered (`01_`, `02_`, `03_`) to indicate the order in which
+they're meant to run. This is a common way to indicate a workflow without using
+a workflow manager. While the numbers are helpful as a reminder, there's no
+guarantee that the someone will actually run them in the specified order. The
+numbers also force a linear workflow, and they're inconvenient if we later need
+to insert another step before the last one.
+
+
+The `01_clean.R` script reads the dataset from the `2020_davis_bikes.rds` file
+and reshapes it so that it's ready for analysis. It saves the resulting data to
+a file at `data/interim/2020_davis_bikes_clean.rds`. Here's the code:
+
+```r
+#!/usr/bin/env Rscript
+#
+# This script generates a clean intermediate version of the 2020 Davis bike
+# counts dataset.
+#
+# You can run this script from the command line to automatically generate the
+# intermediate dataset, or you can source this script and call its functions
+# manually.
+
+library("tidyr")
+
+
+read_bike_data = function(path) {
+  readRDS(path)
+}
+
+
+clean_bike_data = function(bikes) {
+  # Reshape twice so that the dataset's unit of observation is date-location.
+
+  # Reshape so the unit of observation is date.
+  bikes2 = pivot_wider(bikes, values_from = value, names_from = variable)
+
+  # Reshape so the unit of observation is date-location.
+  bikes3 = pivot_longer(
+      bikes2,
+      cols = c(third, loyola),
+      values_to = "count",
+      names_to = "site"
+  )
+
+  bikes3
+}
+
+
+make_clean_bike_data = function(
+  out_path = "data/interim/2020_davis_bikes_clean.rds",
+  path = "data/2020_davis_bikes.rds"
+) {
+  bikes = read_bike_data(path)
+  message("Read '", path, "'")
+
+  bikes = clean_bike_data(bikes)
+
+  # Create output directory if it doesn't exist.
+  out_dir = dirname(out_path)
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir, recursive = TRUE)
+  }
+
+  saveRDS(bikes, out_path)
+  message("Wrote '", out_path, "'")
+}
+
+
+if (sys.nframe() == 0) {
+  # This code will only run when you run the script from the command line.
+  make_clean_bike_data()
+}
+```
+
+The `02_model.R` script reads the cleaned data (`2020_davis_bikes_clean.rds`),
+adds some features useful for modeling, fits a linear regression model, and
+then saves the model to `models/bikes_model.rds`. Here's the code:
+
+```r
+#!/usr/bin/env Rscript
+#
+# This script fits a linear model to the clean 2020 Davis bike counts dataset.
+#
+# You can run this script from the command line to automatically generate the
+# fitted models, or you can source this script and call its functions manually.
+
+
+make_bike_features = function(bikes) {
+  bikes$pandemic = bikes$date > as.Date("2020-03-14")
+  bikes
+}
+
+
+fit_bike_model = function(bikes) {
+  lm(count ~ date*site*pandemic, bikes)
+}
+
+
+predict_bike_model = function(bikes, model) {
+  bikes$count = predict(model, bikes)
+  bikes
+}
+
+
+save_bike_model = function(
+  out_path = "models/bikes_model.rds",
+  data_path = "data/interim/2020_davis_bikes_clean.rds"
+) {
+  bikes = readRDS(data_path)
+  message("Read '", data_path, "'")
+  bikes = make_bike_features(bikes)
+
+  model = fit_bike_model(bikes)
+
+  # Create output directory if it doesn't exist.
+  out_dir = dirname(out_path)
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir, recursive = TRUE)
+  }
+
+  saveRDS(model, out_path)
+  message("Wrote '", out_path, "'")
+}
+
+
+if (sys.nframe() == 0) {
+  # This code will only run when you run the script from the command line.
+  save_bike_model()
+}
+```
+
+Finally, the `03_plot.R` script reads the cleaned data
+(`2020_davis_bikes_clean.rds`) and the model (`models/bikes_model.rds`) and
+uses these to make a scatter plot of the data overlaid with lines for the model
+predictions. The script saves the plot to `figures/bikes_plot.png`. Here's the
+code:
+
+```r
+#!/usr/bin/env Rscript
+#
+# This script makes a plot of the fitted linear model for the 2020 Davis bike
+# counts dataset.
+
+library("ggplot2")
+
+source("R/02_model.R")
+
+
+plot_bike_model = function(
+  bikes,
+  model,
+  preds = predict_bike_model(bikes, model)
+) {
+  ggplot() +
+    aes(x = date, y = count, color = site) +
+    geom_line(data = bikes) +
+    geom_line(data = preds, linetype = "dashed") +
+    geom_vline(xintercept = as.Date("2020-03-14"))
+}
+
+
+save_bike_plot = function(
+  out_path = "figures/bikes_plot.png",
+  model_path = "models/bikes_model.rds",
+  data_path = "data/interim/2020_davis_bikes_clean.rds"
+) {
+  bikes = readRDS("data/interim/2020_davis_bikes_clean.rds")
+  message("Read '", data_path, "'")
+  bikes = make_bike_features(bikes)
+
+  model = readRDS("models/bikes_model.rds")
+  message("Read '", model_path, "'")
+
+  plot = plot_bike_model(bikes, model)
+  ggsave(out_path, plot, create.dir = TRUE)
+  message("Wrote '", out_path, "'")
+}
+
+
+if (sys.nframe() == 0) {
+  # This code will only run when you run the script from the command line.
+  save_bike_plot()
+}
+```
+
+All of the scripts are executable, but also designed so that they can be used
+as libraries of functions. In other words, other scripts can import the
+functions from these scripts (via R's `source` function) and use them as needed
+without executing the imported scripts.
+
+This project will serve as a starting point as we introduce different workflow
+managers.
