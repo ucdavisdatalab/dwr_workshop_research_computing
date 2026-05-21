@@ -288,8 +288,8 @@ of workflow managers][awesome-workflows].
 [awesome-workflows]: https://github.com/pditommaso/awesome-pipeline
 :::
 
-
-## Case Study: Davis Bike Counts
+(sec-case-study-davis-bike-counts-part-i)=
+## Case Study: Davis Bike Counts, Part I
 
 The City of Davis uses automated counters to collect data about how many bikes
 pass by two locations: at the intersection of 3rd Street and University Avenue
@@ -529,5 +529,5 @@ as libraries of functions. In other words, other scripts can import the
 functions from these scripts (via R's `source` function) and use them as needed
 without executing the imported scripts.
 
-This project will serve as a starting point as we introduce different workflow
+This project will serve as a reference point as we introduce different workflow
 managers.
