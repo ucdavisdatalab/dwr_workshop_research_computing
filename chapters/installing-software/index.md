@@ -1,3 +1,4 @@
+(sec-installing-software-with-pixi)=
 # Installing Software with Pixi
 
 _One 2-hour session_

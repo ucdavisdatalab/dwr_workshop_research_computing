@@ -47,7 +47,6 @@ parts:
       - file: chapters/installing-software/b_ucdavis-hpc-modules
       - file: chapters/installing-software/c_python-packages
       - file: chapters/installing-software/d_r-packages
-      - file: chapters/installing-software/e_tasks
 
   - caption: "Introduction to Version Control"
     chapters:
@@ -69,6 +68,18 @@ parts:
       - file: chapters/git-for-teams/01_branches-merges
       - file: chapters/git-for-teams/02_working-with-github
       - file: chapters/git-for-teams/03_making-git-comfortable
+
+  - caption: "Building Workflows and Pipelines"
+    chapters:
+      - file: chapters/workflows/index
+        title: Overview
+  - numbered: true
+    chapters:
+      - file: chapters/workflows/01_workflow-managers
+      - file: chapters/workflows/02_pixi-tasks
+      - file: chapters/workflows/03_snakemake
+  - chapters:
+      - file: chapters/workflows/a_targets
   # - caption: "Retired"
   #   chapters:
   #     - file: chapters/version-control/retired/git-branching
